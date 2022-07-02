@@ -672,6 +672,9 @@
       "ExpenseTracker.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "ExpenseTracker.Utilities": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/ExpenseTracker.Domain.dll": {}
         },
@@ -692,6 +695,16 @@
         },
         "runtime": {
           "bin/placeholder/ExpenseTracker.Infrastructure.dll": {}
+        }
+      },
+      "ExpenseTracker.Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/ExpenseTracker.Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ExpenseTracker.Utilities.dll": {}
         }
       }
     }
@@ -1993,6 +2006,11 @@
       "type": "project",
       "path": "../ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
       "msbuildProject": "../ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj"
+    },
+    "ExpenseTracker.Utilities/1.0.0": {
+      "type": "project",
+      "path": "../ExpenseTracker.Utilities/ExpenseTracker.Utilities.csproj",
+      "msbuildProject": "../ExpenseTracker.Utilities/ExpenseTracker.Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {

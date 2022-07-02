@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ExpenseTracker.Utilities.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExpenseTracker.Domain.Entities
 {
@@ -16,7 +17,7 @@ namespace ExpenseTracker.Domain.Entities
         /// <summary>
         /// Name of the expense category.
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = MessageConstants.RequiredError)]
         [StringLength(60)]
         public string CategoryName { get; set; }
     }
