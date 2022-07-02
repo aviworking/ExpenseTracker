@@ -6,6 +6,7 @@ namespace ExpenseTracker.Infrastructure
     public class ExpenseTrackerContext : DbContext
     {
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

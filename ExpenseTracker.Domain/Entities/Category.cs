@@ -20,5 +20,10 @@ namespace ExpenseTracker.Domain.Entities
         [Required(ErrorMessage = MessageConstants.RequiredError)]
         [StringLength(60)]
         public string CategoryName { get; set; }
+
+        /// <summary>
+        /// Navigation property.
+        /// </summary>
+        public virtual List<Expense> Expenses { get; set; } = new List<Expense>();
     }
 }
