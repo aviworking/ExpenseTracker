@@ -1,0 +1,12 @@
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\bin\Debug\net6.0\ExpenseTracker.Utilities.deps.json
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\bin\Debug\net6.0\ExpenseTracker.Utilities.dll
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\bin\Debug\net6.0\ExpenseTracker.Utilities.pdb
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.csproj.AssemblyReference.cache
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.AssemblyInfoInputs.cache
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.AssemblyInfo.cs
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.dll
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\refint\ExpenseTracker.Utilities.dll
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ExpenseTracker.Utilities.pdb
+C:\Users\User\Documents\Assesment\ExpenseTracker\ExpenseTracker.Utilities\obj\Debug\net6.0\ref\ExpenseTracker.Utilities.dll
