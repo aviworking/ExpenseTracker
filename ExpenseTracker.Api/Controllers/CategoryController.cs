@@ -98,6 +98,44 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
+        /// URL: https://localhost:6600/api/expense-tracker/categories/update
+        /// </summary>
+        /// <param name="id">Primary key of the category entity.</param>
+        /// <param name="category">Category object.</param>
+        [HttpPut]
+        [Route(RouteConstants.UpdateCategory + "{id}")]
+        public async Task<IActionResult> UpdateCategory(int id, Category category)
+        {
+            try
+            {
+                if(id <= 0)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (id != category.CategoryID)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (!await IsCategoryExistant(category))
+                    return StatusCode(StatusCodes.Status404NotFound);
+
+                if (await IsCategoryDuplicate(category))
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                context.Entry(category).State = EntityState.Modified;
+                context.Categories.Update(category);
+                await context.SaveChangesAsync();
+
+                return StatusCode(StatusCodes.Status204NoContent);      
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Verifying whether the category name is a duplicate or not.
         /// </summary>
         /// <param name="category">Category object.</param>
@@ -109,6 +147,30 @@ namespace ExpenseTracker.Api.Controllers
                 var categoryInDb = await context.Categories
                     .AsNoTracking()
                     .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == category.CategoryName.ToLower());
+
+                if (categoryInDb != null)
+                    return true;
+
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Verifying whether the category exists or not.
+        /// </summary>
+        /// <param name="id">Primary key of the category entity.</param>
+        /// <returns>Boolean</returns>
+        private async Task<bool> IsCategoryExistant(Category category)
+        { 
+            try
+            {
+                var categoryInDb = await context.Categories
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.CategoryID == category.CategoryID);
 
                 if (categoryInDb != null)
                     return true;
