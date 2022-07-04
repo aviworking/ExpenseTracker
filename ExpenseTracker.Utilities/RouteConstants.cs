@@ -6,5 +6,6 @@
         public const string Categories = "categories";
         public const string CategoriesByKey = "categories/";
         public const string CreateCategory = "categories/create";
+        public const string UpdateCategory = "categories/update/";
     }
 }

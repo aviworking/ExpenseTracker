@@ -69,5 +69,56 @@ namespace ExpenseTracker.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        /// <summary>
+        /// URL: https://localhost:6600/api/expense-tracker/categories/create
+        /// </summary>
+        /// <param name="category">Category object.</param>
+        [HttpPost]
+        [Route(RouteConstants.CreateCategory)]
+        public async Task<IActionResult> CreateCategory(Category category)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (await IsCategoryDuplicate(category))
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                context.Categories.Add(category);
+                await context.SaveChangesAsync();
+
+                return CreatedAtAction("ReadCategoryByKey", new { key = category.CategoryID }, category);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Verifying whether the category name is a duplicate or not.
+        /// </summary>
+        /// <param name="category">Category object.</param>
+        /// <returns>Boolean</returns>
+        private async Task<bool> IsCategoryDuplicate(Category category) 
+        {
+            try
+            {
+                var categoryInDb = await context.Categories
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.CategoryName.ToLower() == category.CategoryName.ToLower());
+
+                if (categoryInDb != null)
+                    return true;
+
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }
