@@ -21,7 +21,7 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: https://localhost:6600/api/expense-tracker/categories
+        /// URL: https://localhost:6600/api/expense-tracker/categories/
         /// </summary>
         [HttpGet]
         [Route(RouteConstants.Categories)]
@@ -40,7 +40,6 @@ namespace ExpenseTracker.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
-
         }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace ExpenseTracker.Api.Controllers
         /// </summary>
         /// <param name="key">Primary key of the entity.</param>
         [HttpGet]
-        [Route(RouteConstants.CategoriesByKey + "{key}")]
+        [Route(RouteConstants.Categories + "{key}")]
         public async Task<IActionResult> ReadCategoryByKey(int key) 
         {
             try
@@ -62,7 +61,6 @@ namespace ExpenseTracker.Api.Controllers
                     return StatusCode(StatusCodes.Status404NotFound);
 
                 return Ok(category);
-
             }
             catch
             {
@@ -103,25 +101,22 @@ namespace ExpenseTracker.Api.Controllers
         /// <param name="id">Primary key of the category entity.</param>
         /// <param name="category">Category object.</param>
         [HttpPut]
-        [Route(RouteConstants.UpdateCategory + "{id}")]
+        [Route(RouteConstants.UpdateCategory)]
         public async Task<IActionResult> UpdateCategory(int id, Category category)
         {
             try
             {
-                if(id <= 0)
-                    return StatusCode(StatusCodes.Status400BadRequest);
-
                 if (id != category.CategoryID)
                     return StatusCode(StatusCodes.Status400BadRequest);
 
                 if (!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status400BadRequest);
 
-                if (!await IsCategoryExistant(category))
-                    return StatusCode(StatusCodes.Status404NotFound);
-
                 if (await IsCategoryDuplicate(category))
                     return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (!await IsCategoryExistant(category))
+                    return StatusCode(StatusCodes.Status404NotFound);
 
                 context.Entry(category).State = EntityState.Modified;
                 context.Categories.Update(category);
@@ -136,11 +131,43 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
+        /// URL: https://localhost:6600/api/expense-tracker/categories/delete/{key}
+        /// </summary>
+        /// <param name="key">Primary key of the category entity.</param>
+        [HttpDelete]
+        [Route(RouteConstants.DeleteCategory + "{key}")]
+        public async Task<IActionResult> DeleteCategory(int key) 
+        {
+            try
+            {
+                if (key <= 0)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                var category = await context.Categories.FindAsync(key);
+
+                if (category == null)
+                    return StatusCode(StatusCodes.Status404NotFound);
+
+                if (await IsCategoryInUse(category))
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                context.Categories.Remove(category);
+                await context.SaveChangesAsync();
+
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Verifying whether the category name is a duplicate or not.
         /// </summary>
         /// <param name="category">Category object.</param>
         /// <returns>Boolean</returns>
-        private async Task<bool> IsCategoryDuplicate(Category category) 
+        private async Task<bool> IsCategoryDuplicate(Category category)
         {
             try
             {
@@ -173,6 +200,30 @@ namespace ExpenseTracker.Api.Controllers
                     .FirstOrDefaultAsync(c => c.CategoryID == category.CategoryID);
 
                 if (categoryInDb != null)
+                    return true;
+
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Verifying if the category is in use or not.
+        /// </summary>
+        /// <param name="category">Category object.</param>
+        /// <returns>Boolean</returns>
+        private async Task<bool> IsCategoryInUse(Category category) 
+        {
+            try
+            {
+                var expense = await context.Expenses
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.CategoryID == category.CategoryID);
+
+                if (expense != null)
                     return true;
 
                 return false;
