@@ -30,14 +30,10 @@ namespace ExpenseTracker.Domain.Entities
         public Decimal Amount { get; set; }
 
         /// <summary>
-        /// Foreign key from the Category Entity.
+        /// Navigation properties.
         /// </summary>
         [ForeignKey("CategoryID")]
         public int CategoryID { get; set; }
-
-        /// <summary>
-        /// Navigation property.
-        /// </summary>
         public virtual Category Category { get; set; }
     }
 }

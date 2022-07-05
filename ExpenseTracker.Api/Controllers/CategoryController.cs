@@ -9,7 +9,7 @@ namespace ExpenseTracker.Api.Controllers
     /// <summary>
     /// URL: http://localhost:6600/api/expense-tracker/
     /// </summary>
-    [Route(RouteConstants.CategoriesController)]
+    [Route(RouteConstants.ApiController)]
     [ApiController]
     public class CategoryController : ControllerBase
     {
