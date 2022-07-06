@@ -94,17 +94,71 @@ namespace ExpenseTracker.Api.Controllers
             }
         }
 
+        [HttpPut]
+        [Route(RouteConstants.UpdateExpense)]
+        public async Task<IActionResult> UpdateExpense(int id, Expense expense)
+        {
+            try
+            {
+                if(id != expense.ExpenseID)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (IsNotValidExpense(expense))
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (await IsExpenseUnexistant(expense))
+                    return StatusCode(StatusCodes.Status404NotFound);
+
+                context.Entry(expense).State = EntityState.Modified;
+                context.Expenses.Update(expense);
+                await context.SaveChangesAsync();
+
+                return StatusCode(StatusCodes.Status204NoContent);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         /// <summary>
         /// Verifying whether the expense date is a future date or if the amount is less than or equal to zero.
         /// </summary>
         /// <param name="expense">Expense object.</param>
         /// <returns>Boolean</returns>
-        private bool IsNotValidExpense(Expense expense) 
+        private static bool IsNotValidExpense(Expense expense) 
         {
             if (expense.ExpenseDate > DateTime.Now || expense.Amount <= 0)
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// Verifying whether the expense is existant or not.
+        /// </summary>
+        /// <param name="expense">Expense object.</param>
+        /// <returns>Boolean</returns>
+        private async Task<bool> IsExpenseUnexistant(Expense expense)
+        {
+            try
+            {
+                var expenseInDb = await context.Expenses
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(e => e.ExpenseID == expense.ExpenseID);
+
+                if(expenseInDb == null)
+                    return true;
+
+                return false;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

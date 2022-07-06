@@ -2,7 +2,6 @@ using ExpenseTracker.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 //Services:
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
