@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Infrastructure;
+﻿using ExpenseTracker.Domain.Entities;
+using ExpenseTracker.Infrastructure;
 using ExpenseTracker.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -65,6 +66,45 @@ namespace ExpenseTracker.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        /// <summary>
+        /// URL: http://localhost:6600/api/expense-tracker/expenses/create
+        /// </summary>
+        /// <param name="expense">Expense object.</param>>
+        [HttpPost]
+        [Route(RouteConstants.CreateExpense)]
+        public async Task<IActionResult> CreateExpense(Expense expense)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                if (IsNotValidExpense(expense))
+                    return StatusCode(StatusCodes.Status400BadRequest);
+
+                context.Expenses.Add(expense);
+                await context.SaveChangesAsync();
+                return CreatedAtAction("ReadExpenseByKey", new { key = expense.CategoryID }, expense);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Verifying whether the expense date is a future date or if the amount is less than or equal to zero.
+        /// </summary>
+        /// <param name="expense">Expense object.</param>
+        /// <returns>Boolean</returns>
+        private bool IsNotValidExpense(Expense expense) 
+        {
+            if (expense.ExpenseDate > DateTime.Now || expense.Amount <= 0)
+                return true;
+
+            return false;
         }
     }
 }

@@ -16,5 +16,6 @@
         /// ExpenseController routes.
         /// </summary>
         public const string Expenses = "expenses/";
+        public const string CreateExpense = "expenses/create";
     }
 }
