@@ -15,9 +15,9 @@ namespace ExpenseTracker.Api.Controllers
     {
         private readonly ExpenseTrackerContext context;
 
-        public CategoryController(ExpenseTrackerContext context) 
-        { 
-            this.context = context; 
+        public CategoryController(ExpenseTrackerContext context)
+        {
+            this.context = context;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ExpenseTracker.Api.Controllers
                     .AsNoTracking()
                     .OrderBy(c => c.CategoryName)
                     .ToListAsync();
-                
+
                 return Ok(categories);
             }
             catch
@@ -48,7 +48,7 @@ namespace ExpenseTracker.Api.Controllers
         /// <param name="key">Primary key of the entity.</param>
         [HttpGet]
         [Route(RouteConstants.Categories + "{key}")]
-        public async Task<IActionResult> ReadCategoryByKey(int key) 
+        public async Task<IActionResult> ReadCategoryByKey(int key)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace ExpenseTracker.Api.Controllers
 
                 var category = await context.Categories.FindAsync(key);
 
-                if(category == null)
+                if (category == null)
                     return StatusCode(StatusCodes.Status404NotFound);
 
                 return Ok(category);
@@ -122,7 +122,7 @@ namespace ExpenseTracker.Api.Controllers
                 context.Categories.Update(category);
                 await context.SaveChangesAsync();
 
-                return StatusCode(StatusCodes.Status204NoContent);      
+                return StatusCode(StatusCodes.Status204NoContent);
             }
             catch
             {
@@ -136,7 +136,7 @@ namespace ExpenseTracker.Api.Controllers
         /// <param name="key">Primary key of the category entity.</param>
         [HttpDelete]
         [Route(RouteConstants.DeleteCategory + "{key}")]
-        public async Task<IActionResult> DeleteCategory(int key) 
+        public async Task<IActionResult> DeleteCategory(int key)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace ExpenseTracker.Api.Controllers
         /// <param name="id">Primary key of the category entity.</param>
         /// <returns>Boolean</returns>
         private async Task<bool> IsCategoryExistant(Category category)
-        { 
+        {
             try
             {
                 var categoryInDb = await context.Categories
@@ -215,7 +215,7 @@ namespace ExpenseTracker.Api.Controllers
         /// </summary>
         /// <param name="category">Category object.</param>
         /// <returns>Boolean</returns>
-        private async Task<bool> IsCategoryInUse(Category category) 
+        private async Task<bool> IsCategoryInUse(Category category)
         {
             try
             {

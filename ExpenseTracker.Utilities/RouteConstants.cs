@@ -18,5 +18,6 @@
         public const string Expenses = "expenses/";
         public const string CreateExpense = "expenses/create";
         public const string UpdateExpense = "expenses/update";
+        public const string DeleteExpense = "expenses/delete/{key}";
     }
 }
