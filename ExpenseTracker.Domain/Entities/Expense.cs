@@ -20,6 +20,7 @@ namespace ExpenseTracker.Domain.Entities
         /// </summary>
         [Required(ErrorMessage = MessageConstants.RequiredError)]
         [Column(TypeName = "smalldatetime")]
+        [Display(Name = "Expense Date")]
         public DateTime ExpenseDate { get; set; }
 
         /// <summary>
@@ -27,7 +28,8 @@ namespace ExpenseTracker.Domain.Entities
         /// </summary>
         [Required(ErrorMessage = MessageConstants.RequiredError)]
         [Column(TypeName = "decimal(18, 2)")]
-        public Decimal Amount { get; set; }
+        [Display(Name = "Amount")]
+        public decimal Amount { get; set; }
 
         /// <summary>
         /// Navigation properties.

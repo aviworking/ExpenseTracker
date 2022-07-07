@@ -19,6 +19,7 @@ namespace ExpenseTracker.Domain.Entities
         /// </summary>
         [Required(ErrorMessage = MessageConstants.RequiredError)]
         [StringLength(60)]
+        [Display(Name = "Category Name")]
         public string CategoryName { get; set; }
 
         /// <summary>

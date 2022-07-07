@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpenseTracker.Api.Controllers
 {
     /// <summary>
-    /// URL: http://localhost:6600/api/expense-tracker/
+    /// URL: https://localhost:6600/api/expense-tracker/
     /// </summary>
-    [Route(RouteConstants.ApiController)]
+    [Route(RouteConstants.BasePath)]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -45,7 +45,7 @@ namespace ExpenseTracker.Api.Controllers
         /// <summary>
         /// URL: https://localhost:6600/api/expense-tracker/categories/{key}
         /// </summary>
-        /// <param name="key">Primary key of the entity.</param>
+        /// <param name="key">Primary key of the category entity.</param>
         [HttpGet]
         [Route(RouteConstants.Categories + "{key}")]
         public async Task<IActionResult> ReadCategoryByKey(int key)
@@ -115,7 +115,7 @@ namespace ExpenseTracker.Api.Controllers
                 if (await IsCategoryDuplicate(category))
                     return StatusCode(StatusCodes.Status400BadRequest);
 
-                if (!await IsCategoryExistant(category))
+                if (!await IsCategoryExistant(id))
                     return StatusCode(StatusCodes.Status404NotFound);
 
                 context.Entry(category).State = EntityState.Modified;
@@ -191,13 +191,13 @@ namespace ExpenseTracker.Api.Controllers
         /// </summary>
         /// <param name="id">Primary key of the category entity.</param>
         /// <returns>Boolean</returns>
-        private async Task<bool> IsCategoryExistant(Category category)
+        private async Task<bool> IsCategoryExistant(int id)
         {
             try
             {
                 var categoryInDb = await context.Categories
                     .AsNoTracking()
-                    .FirstOrDefaultAsync(c => c.CategoryID == category.CategoryID);
+                    .FirstOrDefaultAsync(c => c.CategoryID == id);
 
                 if (categoryInDb != null)
                     return true;

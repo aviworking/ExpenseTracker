@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure
 {
+    /// <summary>
+    /// Expense tracker API data context. 
+    /// </summary>
     public class ExpenseTrackerContext : DbContext
     {
         public DbSet<Category> Categories { get; set; }

@@ -2,7 +2,10 @@
 {
     public static class RouteConstants
     {
-        public const string ApiController = "api/expense-tracker/";
+        /// <summary>
+        /// Api BasePath.
+        /// </summary>
+        public const string BasePath = "api/expense-tracker/";
 
         /// <summary>
         /// CategoryController routes.
@@ -18,6 +21,6 @@
         public const string Expenses = "expenses/";
         public const string CreateExpense = "expenses/create";
         public const string UpdateExpense = "expenses/update";
-        public const string DeleteExpense = "expenses/delete/{key}";
+        public const string DeleteExpense = "expenses/delete/";
     }
 }

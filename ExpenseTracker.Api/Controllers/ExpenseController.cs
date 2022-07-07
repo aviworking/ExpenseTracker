@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace ExpenseTracker.Api.Controllers
 {
     /// <summary>
-    /// URL: http://localhost:6600/api/expense-tracker/
+    /// URL: https://localhost:6600/api/expense-tracker/
     /// </summary>
-    [Route(RouteConstants.ApiController)]
+    [Route(RouteConstants.BasePath)]
     [ApiController]
     public class ExpenseController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: http://localhost:6600/api/expense-tracker/expenses/
+        /// URL: https://localhost:6600/api/expense-tracker/expenses
         /// </summary>
         [HttpGet]
         [Route(RouteConstants.Expenses)]
@@ -43,7 +43,7 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: http://localhost:6600/api/expense-tracker/expenses/{key}
+        /// URL: https://localhost:6600/api/expense-tracker/expenses/{key}
         /// </summary>
         /// <param name="key">Primary key of expense entity.</param>
         [HttpGet]
@@ -69,7 +69,7 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: http://localhost:6600/api/expense-tracker/expenses/create
+        /// URL: https://localhost:6600/api/expense-tracker/expenses/create
         /// </summary>
         /// <param name="expense">Expense object.</param>>
         [HttpPost]
@@ -81,7 +81,7 @@ namespace ExpenseTracker.Api.Controllers
                 if (!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status400BadRequest);
 
-                if (IsNotValidExpense(expense))
+                if (!IsValidExpense(expense))
                     return StatusCode(StatusCodes.Status400BadRequest);
 
                 context.Expenses.Add(expense);
@@ -95,7 +95,7 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: http://localhost:6600/api/expense-tracker/expenses/update
+        /// URL: https://localhost:6600/api/expense-tracker/expenses/update
         /// </summary>
         /// <param name="id">Primary key of the expense entity.</param>
         /// <param name="expense">Expense object.</param>
@@ -111,10 +111,10 @@ namespace ExpenseTracker.Api.Controllers
                 if (!ModelState.IsValid)
                     return StatusCode(StatusCodes.Status400BadRequest);
 
-                if (IsNotValidExpense(expense))
+                if (!IsValidExpense(expense))
                     return StatusCode(StatusCodes.Status400BadRequest);
 
-                if (await IsExpenseUnexistant(id))
+                if (!await IsExpenseExistant(id))
                     return StatusCode(StatusCodes.Status404NotFound);
 
                 context.Entry(expense).State = EntityState.Modified;
@@ -130,11 +130,11 @@ namespace ExpenseTracker.Api.Controllers
         }
 
         /// <summary>
-        /// URL: http://localhost:6600/api/expense-tracker/expenses/delete/{key}
+        /// URL: https://localhost:6600/api/expense-tracker/expenses/delete/{key}
         /// </summary>
         /// <param name="key">Primary key of the expense entity.</param>
         [HttpDelete]
-        [Route(RouteConstants.DeleteExpense)]
+        [Route(RouteConstants.DeleteExpense + "{key}")]
         public async Task<IActionResult> DeleteExpense(int key)
         {
             try
@@ -163,20 +163,20 @@ namespace ExpenseTracker.Api.Controllers
         /// </summary>
         /// <param name="expense">Expense object.</param>
         /// <returns>Boolean</returns>
-        private static bool IsNotValidExpense(Expense expense)
+        private static bool IsValidExpense(Expense expense)
         {
             if (expense.ExpenseDate > DateTime.Now || expense.Amount <= 0)
-                return true;
+                return false;
 
-            return false;
+            return true;
         }
 
         /// <summary>
         /// Verifying whether the expense is existant or not.
         /// </summary>
         /// <param name="id">Primary key of the expense entity.</param>
-        /// <returns></returns>
-        private async Task<bool> IsExpenseUnexistant(int id)
+        /// <returns>Boolean</returns>
+        private async Task<bool> IsExpenseExistant(int id)
         {
             try
             {
@@ -185,9 +185,9 @@ namespace ExpenseTracker.Api.Controllers
                     .FirstOrDefaultAsync(e => e.ExpenseID == id);
 
                 if (expenseInDb == null)
-                    return true;
+                    return false;
 
-                return false;
+                return true;
             }
             catch
             {
